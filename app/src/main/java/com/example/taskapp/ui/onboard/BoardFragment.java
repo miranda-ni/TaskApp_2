@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.taskapp.MainActivity;
 import com.example.taskapp.R;
 
@@ -24,7 +25,7 @@ import com.example.taskapp.R;
  * A simple {@link Fragment} subclass.
  */
 public class BoardFragment extends Fragment {
-
+    LottieAnimationView lottieAnimationView;
     public BoardFragment() {
         // Required empty public constructor
     }
@@ -41,28 +42,29 @@ public class BoardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView textTitle = view.findViewById(R.id.textTitle);
+        TextView textTitle1 = view.findViewById(R.id.textTitle1);
         TextView textView2 = view.findViewById(R.id.textTitle2);
-        ImageView imageView = view.findViewById(R.id.imageView);
         Button buttonStarted = view.findViewById(R.id.buttonStarted);
+        lottieAnimationView = view.findViewById(R.id.lottieAnimationView);
+
         int pos = getArguments().getInt("pos");
         switch (pos){
             case 0:
-                imageView.setImageResource(R.drawable.magaz);
-                textTitle.setText("SHOP");
+                lottieAnimationView.setAnimation(R.raw.shopcontent);
+                textTitle1.setText("SHOP");
                 textView2.setText("Select from different shops! The Freedom is yours!");
                 buttonStarted.setVisibility(View.INVISIBLE);
                 break;
 
                 case 1:
-                    imageView.setImageResource(R.drawable.search);
-                    textTitle.setText("SEARCH");
+                    lottieAnimationView.setAnimation(R.raw.search);
+                    textTitle1.setText("SEARCH");
                     textView2.setText("Search among 1 million products. The Choice is yours");
                     buttonStarted.setVisibility(View.INVISIBLE);
                     break;
             case 2:
-                imageView.setImageResource(R.drawable.bus);
-                textTitle.setText("FAST");
+                lottieAnimationView.setAnimation(R.raw.fast);
+                textTitle1.setText("FAST");
                 textView2.setText("Super Fast Delivery! Right ar your door");
                 break;
         }

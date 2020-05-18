@@ -31,9 +31,8 @@ import static android.app.Activity.RESULT_OK;
 public class HomeFragment extends Fragment {
 
     private TaskAdapter adapter;
-    private Task task;
-    private int pos;
     private List<Task> list = new ArrayList<>();
+    LinearLayoutManager layoutManager;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -49,14 +48,19 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        list.addAll(App.getInstance().getDatabase().taskDao().getAll());
-        adapter = new TaskAdapter((ArrayList<Task>) list);
+//        arrayList.addAll(App.getInstance().getDatabase().taskDao().getAll());
+        adapter = new TaskAdapter(list);
         recyclerView.setAdapter(adapter);
+        layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setReverseLayout(true);
+//        для изменения порядка
+//        чтобы самые последние записи отображались в верхней части списка
+        layoutManager.setStackFromEnd(true);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
                 Intent intent = new Intent(getContext(), FormActivity.class);
-                intent.putExtra("task",list.get(pos));
+                intent.putExtra("task", list.get(pos));
                 startActivity(intent);
 
             }
@@ -68,18 +72,15 @@ public class HomeFragment extends Fragment {
 
             }
 
-
         });
         loadData();
-
-
 
 
     }
 
     private void showAlert(final Task task) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setMessage("Delete ?").setNegativeButton("Cancel",null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage("Delete ?").setNegativeButton("Cancel", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 App.getInstance().getDatabase().taskDao().delete(task);
@@ -88,6 +89,7 @@ public class HomeFragment extends Fragment {
         });
         builder.show();
     }
+
 
     private void loadData() {
         App.getInstance().getDatabase().taskDao().getAllLive().observe(this, new Observer<List<Task>>() {
@@ -100,16 +102,21 @@ public class HomeFragment extends Fragment {
         });
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 48 && resultCode == RESULT_OK && data!=null){
-//            task = (Task)data.getSerializableExtra("task");
-//            list.add(pos,task);
-//            adapter.update((ArrayList<Task>) list);
-//            adapter.notifyDataSetChanged();
-//
-//
-//        }
-//    }
+    public void sortL() {
+        list.clear();
+        list.addAll(App.getInstance().getDatabase().taskDao().sort());
+        adapter.notifyDataSetChanged();
+        layoutManager.setReverseLayout(false);
+        layoutManager.setStackFromEnd(false);
+
+
+    }
+
+    public void initList() {
+        list.clear();
+        list.addAll(App.getInstance().getDatabase().taskDao().sort());
+        adapter.notifyDataSetChanged();
+        layoutManager.setReverseLayout(false);
+        layoutManager.setStackFromEnd(false);
+    }
 }

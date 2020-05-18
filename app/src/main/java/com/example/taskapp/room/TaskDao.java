@@ -13,13 +13,15 @@ import java.util.List;
 
 @Dao
 public interface TaskDao {
-    @Query(value = "SELECT * FROM task")
+    @Query( "SELECT * FROM task")
     List<Task> getAll();
 
 
     @Query("SELECT * FROM task")
     LiveData<List<Task>> getAllLive();
 //    варианты читения
+    @Query("SELECT * FROM task order by title asc ")
+     List<Task> sort();
 
     @Insert
     void insert(Task task);

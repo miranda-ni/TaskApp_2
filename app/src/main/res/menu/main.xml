@@ -6,8 +6,14 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
-    <item android:id="@+id/action_exit"
+    <item
+        android:id="@+id/action_exit"
         android:orderInCategory="100"
         android:title="exit"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_sort"
+        android:orderInCategory="100"
+        android:title="sort"
+        app:showAsAction="always"/>
 </menu>

@@ -1,18 +1,23 @@
 package com.example.taskapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.taskapp.models.Task;
+
+import static com.daimajia.androidanimations.library.Techniques.Shake;
 
 public class FormActivity extends AppCompatActivity {
     private EditText editTitle;
     private EditText editDesc;
     private Task task;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,21 @@ public class FormActivity extends AppCompatActivity {
     public void onClick(View view) {
         String title = editTitle.getText().toString().trim();
         String desc = editDesc.getText().toString().trim();
+        if (title.isEmpty()){
+            editTitle.setError("Введите задачу");
+            YoYo.with(Shake)
+                    .duration(400)
+                    .playOn(editTitle);
+            return;
+        }
+        if (desc.isEmpty()){
+            editDesc.setError("Введите описание");
+            YoYo.with(Shake)
+                    .duration(400)
+                    .playOn(editDesc);
+            return;
+        }
+
         if (task != null){
             task.setTitle(title);
             task.setDesk(desc);
@@ -53,11 +73,9 @@ public class FormActivity extends AppCompatActivity {
             task.setDesk(desc);
         App.getInstance().getDatabase().taskDao().insert(task);
 //        запись базаданных
-//        Intent intent = new Intent();
-//        intent.putExtra("task",task);
-//        setResult(RESULT_OK,intent);
         finish();
 
     }
 }
+
 }

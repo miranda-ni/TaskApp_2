@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:text="skip"
         android:onClick="onClick"
+        android:background="@drawable/button_rounded_gradient"
         android:layout_marginLeft="350dp"
         android:layout_gravity="end"/>
 

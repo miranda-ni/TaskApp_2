@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 
+import com.example.taskapp.ui.home.HomeFragment;
 import com.example.taskapp.ui.onboard.OnBoardActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -92,11 +93,30 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences preferences =getSharedPreferences("settings",Context.MODE_PRIVATE);
                 preferences.edit().putBoolean("isShown",false).apply();
                 finish();
+                return true;
+            case R.id.action_sort:
+                sort();
+                return true;
 //            onBackPressed();
 
         }
         return super.onOptionsItemSelected(item);
     }
+    private boolean flag;
+    private void sort() {
+        if (flag) {
+            Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+            ((HomeFragment) navHostFragment.getChildFragmentManager().getFragments().get(0)).sortL();
+            flag = false;
+        } else {
+            Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+            ((HomeFragment) navHostFragment.getChildFragmentManager().getFragments().get(0)).initList();
+            flag = true;
+        }
+    }
+
+
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -104,19 +124,6 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode ==RESULT_OK && requestCode ==48){
-//            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-//            if (fragment != null)
-//            fragment.getChildFragmentManager().getFragments().get(0).onActivityResult(requestCode,resultCode,data);
-//            Log.e("TAG", "onActivityResult: home fragment to main");
-//    }
-//
-//}
-
 
 
     }

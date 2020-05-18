@@ -1,9 +1,11 @@
 package com.example.taskapp.ui.home;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,34 +16,39 @@ import com.example.taskapp.models.Task;
 import com.example.taskapp.ui.OnItemClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>  {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
+    private List<Task> list;
+    private OnItemClickListener onItemClickListener;
 
-   private ArrayList<Task> list;
-   private OnItemClickListener onItemClickListener;
-
-    public TaskAdapter(ArrayList<Task> list) {
+    public TaskAdapter(List<Task> list) {
         this.list = list;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_task,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_task, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (position % 2 == 0){
-            holder.itemView.setBackgroundColor(Color.LTGRAY);
-        }else {
-            holder.itemView.setBackgroundColor(Color.WHITE);
+        holder.setIsRecyclable(true);
+
+
+        if (position % 2 == 0) {
+            holder.layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        } else {
+            holder.layout.setBackgroundColor(Color.parseColor("#E5E5E5"));
         }
-        holder.bind(list.get(position));
+        holder.onBind(list.get(position));
+        Log.e("TAG", "onBindViewHolder:");
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -51,42 +58,40 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>  {
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+
     }
-
-    public void update(ArrayList<Task> Task) {
-        list = Task;
-        notifyDataSetChanged();
-    }
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textTitle;
-        private TextView textDes;
 
-        public ViewHolder(@NonNull View itemView) {
+        private LinearLayout layout;
+        private TextView textTitle, textDesc;
+
+
+        public ViewHolder(@NonNull final View itemView) {
             super(itemView);
+            layout = itemView.findViewById(R.id.layout);
             textTitle = itemView.findViewById(R.id.textTitle);
-            textDes = itemView.findViewById(R.id.textDescrip);
+            textDesc = itemView.findViewById(R.id.textDescrip);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     onItemClickListener.onItemClick(getAdapterPosition());
                 }
             });
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View view) {
+                public boolean onLongClick(View v) {
                     onItemClickListener.onItemLongClick(getAdapterPosition());
-
                     return true;
-                }
+                };
             });
+            Log.e("TAG", "ViewHolder: ");
         }
 
-        public void bind(Task task) {
+        public void onBind(Task task) {
             textTitle.setText(task.getTitle());
-            textDes.setText(task.getTitle());
-
+            textDesc.setText(task.getDesk());
         }
     }
+
 }
+
